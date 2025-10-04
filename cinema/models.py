@@ -1,10 +1,10 @@
+import os
 import uuid
 import pathlib
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
-
 
 
 class CinemaHall(models.Model):
@@ -39,9 +39,13 @@ class Actor(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
-def movie_image_path(instance: "Movie", filename: str) -> pathlib.Path:
-    filename = f"{slugify(instance.info)}-{uuid.uuid4()}"+ pathlib.Path(filename).suffix
-    return pathlib.Path("upload/movie/") / pathlib.Path(filename)
+def movie_image_path(instance: "Movie", filename: str) -> str:
+    filename = (
+        f"{slugify(instance.title)}-{uuid.uuid4()}"
+        + pathlib.Path(filename).suffix
+    )
+    return os.path.join("uploads", "movies", filename)
+
 
 class Movie(models.Model):
     title = models.CharField(max_length=255)
@@ -49,7 +53,7 @@ class Movie(models.Model):
     duration = models.IntegerField()
     genres = models.ManyToManyField(Genre)
     actors = models.ManyToManyField(Actor)
-    image = models.ImageField(null=True, upload_to="movie_image_path")
+    image = models.ImageField(null=True, upload_to=movie_image_path)
 
     class Meta:
         ordering = ["title"]

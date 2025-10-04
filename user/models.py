@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import AbstractUser, BaseUserManager, UserManager as DjangoUserManager
+from django.contrib.auth.models import (
+    AbstractUser, BaseUserManager, UserManager as DjangoUserManager
+)
 
 
 class UserManager(DjangoUserManager):
@@ -24,7 +26,6 @@ class UserManager(DjangoUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
-
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have been created")
         if extra_fields.get("is_superuser") is not True:
@@ -37,8 +38,7 @@ class User(AbstractUser):
     """User model"""
 
     username = None
-    email = models.EmailField(_('email address'), unique=True)
-
+    email = models.EmailField(_("email address"), unique=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 

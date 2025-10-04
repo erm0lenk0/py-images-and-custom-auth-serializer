@@ -39,10 +39,19 @@ class MovieImageSerializer(serializers.ModelSerializer):
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = ("id", "title", "description", "duration", "genres", "actors", "image")
+        fields = (
+            "id",
+            "title",
+            "description",
+            "duration",
+            "genres",
+            "actors",
+            "image",
+        )
         extra_kwargs = {
             "image": {"read_only": True}
         }
+
 
 class MovieListSerializer(MovieSerializer):
     genres = serializers.SlugRelatedField(
@@ -79,7 +88,6 @@ class MovieSessionSerializer(serializers.ModelSerializer):
         if obj.movie.image:
             return obj.movie.image.url
         return None
-
 
 
 class MovieSessionListSerializer(MovieSessionSerializer):
